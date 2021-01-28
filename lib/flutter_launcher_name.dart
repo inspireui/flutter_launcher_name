@@ -1,16 +1,23 @@
 library flutter_launcher_name;
 
 import 'dart:io';
-
+import 'package:args/args.dart';
 import 'package:flutter_launcher_name/android.dart' as android;
 import 'package:flutter_launcher_name/constants.dart' as constants;
 import 'package:flutter_launcher_name/ios.dart' as ios;
 import 'package:yaml/yaml.dart';
 
-exec() {
-  print('start');
+const String fileOption = 'file';
 
-  final config = loadConfigFile();
+exec(List<String> arguments) {
+  print('start');
+  final ArgParser parser = ArgParser(allowTrailingOptions: true);
+ 
+  parser.addOption(fileOption,
+      abbr: 'f', help: 'Config file default pubspec.yaml');
+  final ArgResults argResults = parser.parse(arguments);
+
+  final config = loadConfigFile(argResults);
 
   final newName = config['name'];
 
@@ -20,10 +27,12 @@ exec() {
   print('exit');
 }
 
-Map<String, dynamic> loadConfigFile() {
-  final File file = File('pubspec.yaml');
+Map<String, dynamic> loadConfigFile(ArgResults argResults) {
+  final String configFile = argResults[fileOption];
+  final File file = File(configFile ?? 'pubspec.yaml');
   final String yamlString = file.readAsStringSync();
   final Map yamlMap = loadYaml(yamlString);
+  print(yamlMap.toString());
 
   if (yamlMap == null || !(yamlMap[constants.yamlKey] is Map)) {
     throw new Exception('flutter_launcher_name was not found');
