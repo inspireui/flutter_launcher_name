@@ -10,7 +10,7 @@ import 'package:yaml/yaml.dart';
 const String fileOption = 'file';
 
 exec(List<String> arguments) {
-  print('start');
+  print('• Updating flutter app name');
   final ArgParser parser = ArgParser(allowTrailingOptions: true);
  
   parser.addOption(fileOption,
@@ -24,7 +24,7 @@ exec(List<String> arguments) {
   android.overwriteAndroidManifest(newName);
   ios.overwriteInfoPlist(newName);
 
-  print('exit');
+  print('✓ Successfully');
 }
 
 Map<String, dynamic> loadConfigFile(ArgResults argResults) {
@@ -32,7 +32,6 @@ Map<String, dynamic> loadConfigFile(ArgResults argResults) {
   final File file = File(configFile ?? 'pubspec.yaml');
   final String yamlString = file.readAsStringSync();
   final Map yamlMap = loadYaml(yamlString);
-  print(yamlMap.toString());
 
   if (yamlMap == null || !(yamlMap[constants.yamlKey] is Map)) {
     throw new Exception('flutter_launcher_name was not found');
