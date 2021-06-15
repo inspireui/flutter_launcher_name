@@ -12,7 +12,7 @@ const String fileOption = 'file';
 exec(List<String> arguments) {
   print('• Updating flutter app name');
   final ArgParser parser = ArgParser(allowTrailingOptions: true);
- 
+
   parser.addOption(fileOption,
       abbr: 'f', help: 'Config file default pubspec.yaml');
   final ArgResults argResults = parser.parse(arguments);
@@ -27,11 +27,11 @@ exec(List<String> arguments) {
   print('✓ Successfully');
 }
 
-Map<String, dynamic> loadConfigFile(ArgResults argResults) {
-  final String configFile = argResults[fileOption];
-  final File file = File(configFile ?? 'pubspec.yaml');
+Map<String, dynamic> loadConfigFile(ArgResults? argResults) {
+  final String configFile = argResults?[fileOption] ?? 'pubspec.yaml';
+  final File file = File(configFile);
   final String yamlString = file.readAsStringSync();
-  final Map yamlMap = loadYaml(yamlString);
+  final Map? yamlMap = loadYaml(yamlString);
 
   if (yamlMap == null || !(yamlMap[constants.yamlKey] is Map)) {
     throw new Exception('flutter_launcher_name was not found');
